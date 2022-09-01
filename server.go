@@ -3,8 +3,9 @@ package main
 import (
 	"net/http"
 
-	"github.com/byuoitav/clevertouch-control/handlers"
 	"github.com/gin-gonic/gin"
+
+	"github.com/byuoitav/clevertouch-control/handlers"
 )
 
 func main() {

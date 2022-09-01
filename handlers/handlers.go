@@ -1,90 +1,109 @@
 package handlers
 
 import (
+	"net/http"
+
 	"github.com/gin-gonic/gin"
 )
 
-func PowerOn(context *gin.Context) error {
+func PowerOn(context *gin.Context) {
 
-	return nil
+	context.JSON(http.StatusOK, 1)
+	return
 }
 
-func Standby(context *gin.Context) error {
+func Standby(context *gin.Context) {
 
-	return nil
+	context.JSON(http.StatusOK, 1)
+	return
 }
 
-func GetPower(context *gin.Context) error {
+func GetPower(context *gin.Context) {
 
-	return nil
+	context.JSON(http.StatusOK, 1)
+	return
 }
 
-func SwitchInput(context *gin.Context) error {
+func SwitchInput(context *gin.Context) {
 
-	return nil
+	context.JSON(http.StatusOK, 1)
+	return
 }
 
-func SetVolume(context *gin.Context) error {
+func SetVolume(context *gin.Context) {
 
-	return nil
+	context.JSON(http.StatusOK, 1)
+	return
 }
 
-func VolumeUnmute(context *gin.Context) error {
+func VolumeUnmute(context *gin.Context) {
 
-	return nil
+	context.JSON(http.StatusOK, 1)
+	return
 }
 
-func VolumeMute(context *gin.Context) error {
+func VolumeMute(context *gin.Context) {
 
-	return nil
+	context.JSON(http.StatusOK, 1)
+	return
 }
 
-func setMute(context *gin.Context) error {
+func setMute(context *gin.Context) {
 
-	return nil
+	context.JSON(http.StatusOK, 1)
+	return
 }
 
-func BlankDisplay(context *gin.Context) error {
+func BlankDisplay(context *gin.Context) {
 
-	return nil
+	context.JSON(http.StatusOK, 1)
+	return
 }
 
-func UnblankDisplay(context *gin.Context) error {
+func UnblankDisplay(context *gin.Context) {
 
-	return nil
+	context.JSON(http.StatusOK, 1)
+	return
 }
 
-func GetVolume(context *gin.Context) error {
+func GetVolume(context *gin.Context) {
 
-	return nil
+	context.JSON(http.StatusOK, 1)
+	return
 }
 
-func GetInput(context *gin.Context) error {
+func GetInput(context *gin.Context) {
 
-	return nil
+	context.JSON(http.StatusOK, 1)
+	return
 }
 
-func GetInputList(context *gin.Context) error {
+func GetInputList(context *gin.Context) {
 
-	return nil
+	context.JSON(http.StatusOK, 1)
+	return
 }
 
-func GetMute(context *gin.Context) error {
+func GetMute(context *gin.Context) {
 
-	return nil
+	context.JSON(http.StatusOK, 1)
+	return
 }
 
-func GerBlank(context *gin.Context) error {
+func GerBlank(context *gin.Context) {
 
-	return nil
+	context.JSON(http.StatusOK, 1)
+	return
 }
 
-func GetHardwareInfo(context *gin.Context) error {
+func GetHardwareInfo(context *gin.Context) {
 
-	return nil
+	context.JSON(http.StatusOK, 1)
+	return
 }
 
-func GetActiveSignal(context *gin.Context) error {
+func GetActiveSignal(context *gin.Context) {
 
-	return nil
+	context.JSON(http.StatusOK, 1)
+	return
 }

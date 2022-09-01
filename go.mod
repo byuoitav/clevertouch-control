@@ -1,4 +1,4 @@
-module github.com/byuoitav/clevertouch-control.git
+module github.com/byuoitav/clevertouch-control
 
 go 1.19
 
