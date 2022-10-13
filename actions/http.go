@@ -5,10 +5,8 @@ import (
 	"context"
 	"encoding/json"
 	"errors"
-	"fmt"
 	"io"
 	"net/http"
-	"os"
 )
 
 // CleverTouch Command Codes
@@ -129,33 +127,28 @@ func PostHTTPWithContext(ctx context.Context, address string, service string, pa
 
 	reqBody, err := json.Marshal(payload)
 	if err != nil {
-		return []byte{}, err
+		return nil, err
 	}
 
-	addr := fmt.Sprintf("http://%s/CleverTouch/%s", address, service)
-
-	req, err := http.NewRequestWithContext(ctx, "POST", addr, bytes.NewBuffer(reqBody))
+	req, err := http.NewRequestWithContext(ctx, "POST", address, bytes.NewBuffer(reqBody))
 	if err != nil {
-		return []byte{}, err
+		return nil, err
 	}
-
-	req.Header.Set("Content-Type", "application/json")
-	req.Header.Set("X-Auth-PSK", os.Getenv(""))
 
 	resp, err := http.DefaultClient.Do(req)
 	if err != nil {
-		return []byte{}, err
+		return nil, err
 	}
 	defer resp.Body.Close()
 
 	body, err := io.ReadAll(resp.Body)
 	switch {
 	case err != nil:
-		return []byte{}, err
+		return nil, err
 	case resp.StatusCode != http.StatusOK:
-		return []byte{}, errors.New(string(body))
+		return nil, errors.New(string(body))
 	case body == nil:
-		return []byte{}, errors.New("Response from device was blank")
+		return nil, errors.New("response from device was blank")
 	}
 
 	return body, nil

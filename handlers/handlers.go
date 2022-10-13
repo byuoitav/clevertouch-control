@@ -121,7 +121,7 @@ func setMute(context *gin.Context, address string, status bool, retryCount int) 
 			return err
 		}
 
-		if true == status {
+		if postStauts.Muted == status {
 			return nil
 		}
 
