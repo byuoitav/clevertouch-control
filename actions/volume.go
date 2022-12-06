@@ -7,16 +7,24 @@ import (
 )
 
 // CleverTouch Command Codes
+
 /*
 
-Action Codes:
+SET:
 
-Mute TV 	= 	AA BB CC 03 01 00 04 DD EE FF
-Unmute TV 	= 	AA BB CC 03 01 01 05 DD EE FF
-Volume		=	AA BB CC 03 00 xx ** DD EE FF (000-100)
+Mute:
+39 3A 30 31 53 39 30 30 30 0d = (OFF)
+39 3A 30 31 53 39 30 30 31 0d = (ON)
+
+Volume (Range 0 - 100):
+To set volume change 7-9th byte digit to match the desired volume value.
+
+38 3A 30 31 53 38 30 35 30 0d = 50%
+38 3A 30 31 53 38 31 30 30 0d = 100%
+38 3A 30 31 53 38 30 30 30 0d = 0%
 
 
-Response Codes:
+GET:
 
 Volume	=	AA BB CC 03 02 00 05 DD EE FF
 			AA BB CC 82 00 xx ** DD EE FF Volume is xx
