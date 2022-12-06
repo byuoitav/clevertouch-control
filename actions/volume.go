@@ -2,6 +2,7 @@ package actions
 
 import (
 	"bytes"
+	"context"
 	"encoding/binary"
 	"log"
 )
@@ -26,13 +27,14 @@ To set volume change 7-9th byte digit to match the desired volume value.
 
 GET:
 
-Volume	=	AA BB CC 03 02 00 05 DD EE FF
-			AA BB CC 82 00 xx ** DD EE FF Volume is xx
-			xx = the amount of volume. EX
+38 3A 30 31 47 38 30 30 30 0D = Get Volume
 
-Audio Status	= 	AA BB CC 03 03 00 06 DD EE FF
-					AA BB CC 82 01 00 83 DD EE FF (Mute)
-					AA BB CC 82 01 01 84 DD EE FF (Unmute)
+The response is changes the  7-9th byte to the current volume value.
+38 3A 30 31 72 38 30 35 30 0D = 50%
+
+39 3A 30 31 47 39 30 30 30 0D = Get Mute
+39 3A 30 31 72 39 30 30 30 0D = Mute OFF
+39 3A 30 31 72 39 30 30 31 0D = Mute ON
 
 */
 
@@ -41,49 +43,41 @@ type Volume struct {
 }
 
 type Mute struct {
-	Muted bool `json:"muted"`
+	Muted bool `json:"mute"`
 }
 
-func GetVolume(address string) (Volume, error) {
-	log.Printf("Getting volume for %v", address)
-	var output Volume
-	payload := []byte{0xAA, 0xBB, 0xCC, 0x03, 0x02, 0x00, 0x05, 0xDD, 0xEE, 0xFF}
-	log.Println("getting volume status")
-	resp, err := PostHTTP(address, payload, "audio")
-	if err != nil {
-		return Volume{}, err
+func SetMute(ctx context.Context, address string, status bool) error {
+	log.Printf("Setting mute to %v", status)
+	//Mute ON = 39 3A 30 31 53 39 30 30 31 0d
+	//Mute OFF = 39 3A 30 31 53 39 30 30 30 0d
+	if status {
+		payload := []byte{0x39, 0x3A, 0x30, 0x31, 0x53, 0x39, 0x30, 0x30, 0x31, 0x0d}
+		_, err := PostHTTPWithContext(ctx, address, "audio", payload)
+		if err != nil {
+			return err
+		}
+		status = false
+	} else {
+		payload := []byte{0x39, 0x3A, 0x30, 0x31, 0x53, 0x39, 0x30, 0x30, 0x30, 0x0d}
+		_, err := PostHTTPWithContext(ctx, address, "audio", payload)
+		if err != nil {
+			return err
+		}
+		status = true
 	}
-
-	output.Volume = int(binary.BigEndian.Uint64(resp[5:6]))
-
-	return output, nil
-}
-
-func getAudioInfo(address string) (int, error) {
-	//AA BB CC 03 02 00 05 DD EE FF
-	payload := []byte{0xAA, 0xBB, 0xCC, 0x03, 0x02, 0x00, 0x05, 0xDD, 0xEE, 0xFF}
-	log.Println("getting volume status")
-
-	resp, err := PostHTTP(address, payload, "audio")
-	if err != nil {
-		return 0, err
-	}
-
-	vol := int(binary.BigEndian.Uint64(resp[5:6]))
-
-	return vol, nil
+	return nil
 }
 
 func GetMute(address string) (Mute, error) {
 	var output Mute
 
-	// AA BB CC 82 01 00 83 DD EE FF (Mute)
-	mute := []byte{0xAA, 0xBB, 0xCC, 0x82, 0x01, 0x00, 0x83, 0xDD, 0xEE, 0xFF}
-	// AA BB CC 82 01 01 84 DD EE FF (Unmute)
-	unmute := []byte{0xAA, 0xBB, 0xCC, 0x82, 0x01, 0x01, 0x84, 0xDD, 0xEE, 0xFF}
+	//39 3A 30 31 72 39 30 30 31 0D = Mute ON
+	mute := []byte{0x39, 0x3A, 0x30, 0x31, 0x72, 0x39, 0x30, 0x30, 0x31, 0x0D}
+	//39 3A 30 31 72 39 30 30 30 0D = Mute OFF
+	unmute := []byte{0x39, 0x3A, 0x30, 0x31, 0x72, 0x39, 0x30, 0x30, 0x30, 0x0D}
 
-	//AA BB CC 03 03 00 06 DD EE FF
-	payload := []byte{0xAA, 0xBB, 0xCC, 0x03, 0x03, 0x00, 0x06, 0xDD, 0xEE, 0xFF}
+	//39 3A 30 31 47 39 30 30 30 0D = Get Mute
+	payload := []byte{0x39, 0x3A, 0x30, 0x31, 0x47, 0x39, 0x30, 0x30, 0x30, 0x0D}
 	log.Println("getting mute status")
 	resp, err := PostHTTP(address, payload, "audio")
 	if err != nil {
@@ -95,6 +89,36 @@ func GetMute(address string) (Mute, error) {
 	} else {
 		return Mute{}, err
 	}
+
+	return output, nil
+}
+
+func SetVolume(ctx context.Context, address string, volume int) error {
+	log.Printf("Setting volume to %v", volume)
+	//38 3A 30 31 53 38 30 35 30 0d = 50%
+	payload := []byte{0x38, 0x3A, 0x30, 0x31, 0x53, 0x38, 0x30, 0x35, 0x30, 0x0d}
+	_, err := PostHTTPWithContext(ctx, address, "audio", payload)
+
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func GetVolume(address string) (Volume, error) {
+	log.Printf("Getting volume for %v", address)
+	var output Volume
+
+	//38 3A 30 31 47 38 30 30 30 0D = Get Volume
+	payload := []byte{0x38, 0x3A, 0x30, 0x31, 0x47, 0x38, 0x30, 0x30, 0x30, 0x0D}
+	log.Println("getting volume status")
+	resp, err := PostHTTP(address, payload, "audio")
+	if err != nil {
+		return Volume{}, err
+	}
+
+	output.Volume = int(binary.BigEndian.Uint64(resp[5:6]))
 
 	return output, nil
 }
