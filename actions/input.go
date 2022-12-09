@@ -77,11 +77,11 @@ func GetInput(address string) (Input, error) {
 }
 
 // SetInput sets the input on the display
-func SetInput(ctx context.Context, address string, input Input) error {
+func SetInput(ctx context.Context, address string, input string) error {
 	var payload []byte
 
-	log.Println("input: ", input.Input)
-	switch input.Input {
+	log.Println("input: ", input)
+	switch input {
 	case "tv":
 		// 3A 3A 30 31 53 3A 30 35 31 0d = TV
 		payload = []byte{0x3A, 0x3A, 0x30, 0x31, 0x53, 0x3A, 0x30, 0x35, 0x31, 0x0d}
@@ -114,9 +114,4 @@ func SetInput(ctx context.Context, address string, input Input) error {
 		return err
 	}
 	return nil
-}
-
-// GetActiveSignal determines if the current input on the display is active or not
-func GetActiveSignal(address string) (string, error) {
-	return "", nil
 }
