@@ -9,47 +9,6 @@ import (
 	"net/http"
 )
 
-// CleverTouch Command Codes
-/*
-
-Action Codes:
-
-Power ON 	= 	AA BB CC 01 00 00 01 DD EE FF
-Power OFF 	= 	AA BB CC 01 01 00 02 DD EE FF
-
-Input Tv 	= 	AA BB CC 02 01 00 03 DD EE FF
-Input HDMI1 = 	AA BB CC 02 06 00 08 DD EE FF
-Input HDMI2 = 	AA BB CC 02 07 00 09 DD EE FF
-Input HDMI3 = 	AA BB CC 02 05 00 07 DD EE FF
-Input PC 	= 	AA BB CC 02 08 00 0A DD EE FF
-
-Mute TV 	= 	AA BB CC 03 01 00 04 DD EE FF
-Unmute TV 	= 	AA BB CC 03 01 01 05 DD EE FF
-Volume		=	AA BB CC 03 00 xx ** DD EE FF (000-100)
-
-
-Response Codes:
-
-Power	=	AA BB CC 01 02 00 03 DD EE FF
-			AA BB CC 80 00 00 80 DD EE FF (ON)
-			AA BB CC 80 01 00 81 DD EE FF (OFF)
-
-Volume	=	AA BB CC 03 02 00 05 DD EE FF
-			AA BB CC 82 00 xx ** DD EE FF Volume is xx
-			xx = the amount of volume. EX
-
-Audio Status	= 	AA BB CC 03 03 00 06 DD EE FF
-					AA BB CC 82 01 00 83 DD EE FF (Mute)
-					AA BB CC 82 01 01 84 DD EE FF (Unmute)
-
-Input Satus		=	AA BB CC 02 00 00 02 DD EE FF
-					AA BB CC 81 01 00 82 DD EE FF (TV)
-					AA BB CC 81 06 00 87 DD EE FF (HDMI1)
-					AA BB CC 81 07 00 88 DD EE FF (HDMI2)
-					AA BB CC 81 05 00 86 DD EE FF (HDMI3)
-
-*/
-
 // CTAudioResponse is the struct that is returned when we query the adio state
 type CTAudioResponse struct {
 	Result [][]CTAudioSettings `json:"result"`
