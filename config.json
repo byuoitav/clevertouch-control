@@ -1,0 +1,14 @@
+{
+    "name": "clevertouch-control",
+    "port": ":8013",
+    "env-vars": [
+        "HUB_ADDRESS",
+        "SYSTEM_ID",
+        "DB_ADDRESS",
+        "STOP_REPLICATION",
+        "DB_PASSWORD",
+        "DB_USERNAME",
+        "ROOM_SYSTEM"
+    ]
+
+}
