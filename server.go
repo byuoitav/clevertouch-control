@@ -30,11 +30,11 @@ func main() {
 
 	// action endpoints
 	route := router.Group("/api/v1")
-	route.POST("/:address/power/:power", handlers.SetPower)
-	route.POST("/:address/volume/:volume", handlers.SetVolume)
-	route.POST("/:address/volume/mute/:mute", handlers.SetMute)
-	route.POST("/:address/display/:blank", handlers.SetBlank)
-	route.POST("/:address/input/:input", handlers.SetInput)
+	route.GET("/:address/power/:power", handlers.SetPower)
+	route.GET("/:address/volume/:volume", handlers.SetVolume)
+	route.GET("/:address/volume/mute/:mute", handlers.SetMute)
+	route.GET("/:address/display/:blank", handlers.SetBlank)
+	route.GET("/:address/input/:input", handlers.SetInput)
 
 	// status endpoints
 	route.GET("/:address/power", handlers.GetPower)
