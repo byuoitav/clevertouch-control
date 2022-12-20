@@ -76,11 +76,11 @@ func GetPower(ctx context.Context, address string) (Power, error) {
 	log.Println("power status: ", response)
 
 	if bytes.Equal(response, on) {
-		output.Power = "ON"
+		output.Power = "on"
 	} else if bytes.Equal(response, off) {
-		output.Power = "OFF"
+		output.Power = "standby"
 	} else {
-		output.Power = "UNKNOWN"
+		output.Power = "standby"
 	}
 
 	return output, nil
