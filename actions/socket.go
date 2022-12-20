@@ -31,7 +31,9 @@ func createConnection(address string, port string) (*net.TCPConn, error) {
 }
 
 // SendCommand opens a connection with <addr> and sends the <command> to the via, returning the response from the via, or an error if one occured.
-func sendCommand(address string, port string, cmd []byte) ([]byte, error) {
+func sendCommand(address string, cmd []byte) ([]byte, error) {
+	port := "4999"
+
 	// get the connection
 	fmt.Printf("Opening telnet connection with %s\n", address)
 	conn, err := createConnection(address, port)

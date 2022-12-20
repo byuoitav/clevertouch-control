@@ -38,7 +38,7 @@ func SetPower(ctx context.Context, address string, status bool) error {
 		log.Println("Turning on TV")
 		//Power ON = 30 3A 30 31 53 30 30 30 31 0d
 		payload := []byte{0x3A, 0x30, 0x31, 0x53, 0x30, 0x30, 0x30, 0x31, 0x0d}
-		_, err := sendCommand(address, "4999", payload)
+		_, err := sendCommand(address, payload)
 		if err != nil {
 			return err
 		}
@@ -46,7 +46,7 @@ func SetPower(ctx context.Context, address string, status bool) error {
 		log.Println("Turning off TV")
 		//Power OFF = 30 3A 30 31 53 30 30 30 30 0d
 		payload := []byte{0x3A, 0x30, 0x31, 0x53, 0x30, 0x30, 0x30, 0x30, 0x0d}
-		_, err := sendCommand(address, "4999", payload)
+		_, err := sendCommand(address, payload)
 		if err != nil {
 			return err
 		}
@@ -65,7 +65,7 @@ func GetPower(ctx context.Context, address string) (Power, error) {
 	//GetPower = 30 3A 30 31 47 30 30 30 30 0D
 	payload := []byte{0x3A, 0x30, 0x31, 0x47, 0x30, 0x30, 0x30, 0x30, 0x0D}
 	log.Println("getting power status")
-	response, err := sendCommand(address, "4999", payload)
+	response, err := sendCommand(address, payload)
 	if err != nil {
 		return Power{}, err
 	}
