@@ -22,6 +22,12 @@ func main() {
 		})
 	})
 
+	router.GET("/status", func(c *gin.Context) {
+		c.JSON(http.StatusOK, gin.H{
+			"message": "good",
+		})
+	})
+
 	// action endpoints
 	route := router.Group("/api/v1")
 	route.POST("/:address/power/:power", handlers.SetPower)
