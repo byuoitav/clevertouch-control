@@ -42,7 +42,7 @@ func sendCommand(address string, cmd []byte) ([]byte, error) {
 	}
 	defer conn.Close()
 
-	bufClear := []byte{0x0D}
+	//bufClear := []byte{0x0D}
 
 	timeoutDuration := 3 * time.Second
 
@@ -51,9 +51,10 @@ func sendCommand(address string, cmd []byte) ([]byte, error) {
 
 	// write command
 	if len(cmd) > 0 {
-		firstCmd := append(bufClear, cmd...)
-		fcmd := append(firstCmd, bufClear...)
-		_, err = conn.Write(fcmd)
+		//firstCmd := append(bufClear, cmd...)
+		//fcmd := append(firstCmd, bufClear...)
+		//_, err = conn.Write(fcmd)
+		_, err = conn.Write(cmd)
 		if err != nil {
 			return nil, err
 		}
@@ -62,12 +63,42 @@ func sendCommand(address string, cmd []byte) ([]byte, error) {
 	reader := bufio.NewReader(conn)
 	resp, err := reader.ReadBytes('\r')
 	if err != nil {
-		err = fmt.Errorf("error reading from system: %s\n", err.Error())
-		fmt.Printf(err.Error())
+		err = fmt.Errorf("error reading from system: %s", err.Error())
+		//fmt.Printf(err.Error())
 		return nil, err
 	}
 
 	fmt.Printf("Response from device: %x\n", resp)
 
 	return resp, nil
+}
+
+// SendCommand opens a connection with <addr> and sends the <command> to the via, returning the response from the via, or an error if one occured.
+func sendOneWayCommand(address string, cmd []byte) ([]byte, error) {
+	port := "4999"
+
+	// get the connection
+	fmt.Printf("Opening telnet connection with %s\n", address)
+	conn, err := createConnection(address, port)
+	if err != nil {
+		return nil, err
+	}
+	defer conn.Close()
+
+	timeoutDuration := 3 * time.Second
+
+	// Set Read Connection Duration
+	conn.SetReadDeadline(time.Now().Add(timeoutDuration))
+
+	// write command
+	if len(cmd) > 0 {
+		_, err = conn.Write(cmd)
+		if err != nil {
+			return nil, err
+		}
+	}
+
+	fmt.Printf("One way command sent: %s\n", cmd)
+
+	return nil, nil
 }

@@ -6,10 +6,14 @@ import (
 	"github.com/gin-gonic/gin"
 
 	"github.com/byuoitav/clevertouch-control/handlers"
+	"github.com/spf13/pflag"
 )
 
 func main() {
-	port := ":8013"
+	var port string
+	pflag.StringVarP(&port, "port", "p", "8013", "port for microservice to av-api communication")
+	pflag.Parse()
+	port = ":" + port
 
 	router := gin.Default()
 	router.GET("/ping", func(c *gin.Context) {
@@ -24,13 +28,14 @@ func main() {
 	route.POST("/:address/volume/:volume", handlers.SetVolume)
 	route.POST("/:address/volume/mute/:mute", handlers.SetMute)
 	route.POST("/:address/display/:blank", handlers.SetBlank)
-	route.POST("/:address/input/:port", handlers.SetInput)
+	route.POST("/:address/input/:input", handlers.SetInput)
 
 	// status endpoints
 	route.GET("/:address/power", handlers.GetPower)
 	route.GET("/:address/volume", handlers.GetVolume)
 	route.GET("/:address/volume/mute", handlers.GetMute)
 	route.GET("/:address/input", handlers.GetInput)
+	route.GET("/:address/booted", handlers.GetBooted)
 
 	server := &http.Server{
 		Addr:           port,

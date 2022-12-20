@@ -77,15 +77,15 @@ func SetMute(ctx context.Context, address string, status bool) error {
 	//Mute ON = 39 3A 30 31 53 39 30 30 31 0d
 	//Mute OFF = 39 3A 30 31 53 39 30 30 30 0d
 	if status {
-		payload := []byte{0x39, 0x3A, 0x30, 0x31, 0x53, 0x39, 0x30, 0x30, 0x31, 0x0d}
-		_, err := PostHTTPWithContext(ctx, address, "audio", payload)
+		payload := []byte{0x3A, 0x30, 0x31, 0x53, 0x39, 0x30, 0x30, 0x31, 0x0d}
+		_, err := sendCommand(address, payload)
 		if err != nil {
 			return err
 		}
 		status = false
 	} else {
-		payload := []byte{0x39, 0x3A, 0x30, 0x31, 0x53, 0x39, 0x30, 0x30, 0x30, 0x0d}
-		_, err := PostHTTPWithContext(ctx, address, "audio", payload)
+		payload := []byte{0x3A, 0x30, 0x31, 0x53, 0x39, 0x30, 0x30, 0x30, 0x0d}
+		_, err := sendCommand(address, payload)
 		if err != nil {
 			return err
 		}
@@ -98,14 +98,14 @@ func GetMute(address string) (Mute, error) {
 	var output Mute
 
 	//39 3A 30 31 72 39 30 30 31 0D = Mute ON
-	mute := []byte{0x39, 0x3A, 0x30, 0x31, 0x72, 0x39, 0x30, 0x30, 0x31, 0x0D}
+	mute := []byte{0x3A, 0x30, 0x31, 0x72, 0x39, 0x30, 0x30, 0x31, 0x0D}
 	//39 3A 30 31 72 39 30 30 30 0D = Mute OFF
-	unmute := []byte{0x39, 0x3A, 0x30, 0x31, 0x72, 0x39, 0x30, 0x30, 0x30, 0x0D}
+	unmute := []byte{0x3A, 0x30, 0x31, 0x72, 0x39, 0x30, 0x30, 0x30, 0x0D}
 
 	//39 3A 30 31 47 39 30 30 30 0D = Get Mute
-	payload := []byte{0x39, 0x3A, 0x30, 0x31, 0x47, 0x39, 0x30, 0x30, 0x30, 0x0D}
+	payload := []byte{0x3A, 0x30, 0x31, 0x47, 0x39, 0x30, 0x30, 0x30, 0x0D}
 	log.Println("getting mute status")
-	resp, err := PostHTTP(address, payload, "audio")
+	resp, err := sendCommand(address, payload)
 	if err != nil {
 		return Mute{}, err
 	} else if bytes.Equal(resp, mute) {
@@ -132,8 +132,8 @@ func SetVolume(ctx context.Context, address string, volume int) error {
 	v2 := string(vol[1])
 	v3 := string(vol[2])
 
-	payload := []byte{0x38, 0x3A, 0x30, 0x31, 0x53, 0x38, volCodes[v1], volCodes[v2], volCodes[v3], 0x0d}
-	_, err := PostHTTPWithContext(ctx, address, "audio", payload)
+	payload := []byte{0x3A, 0x30, 0x31, 0x53, 0x38, volCodes[v1], volCodes[v2], volCodes[v3], 0x0d}
+	_, err := sendCommand(address, payload)
 
 	if err != nil {
 		return err
@@ -147,13 +147,13 @@ func GetVolume(address string) (Volume, error) {
 	var output Volume
 
 	//38 3A 30 31 47 38 30 30 30 0D = Get Volume
-	payload := []byte{0x38, 0x3A, 0x30, 0x31, 0x47, 0x38, 0x30, 0x30, 0x30, 0x0D}
+	payload := []byte{0x3A, 0x30, 0x31, 0x47, 0x38, 0x30, 0x30, 0x30, 0x0D}
 	log.Println("getting volume status")
-	resp, err := PostHTTP(address, payload, "audio")
+	resp, err := sendCommand(address, payload)
 	if err != nil {
 		return Volume{}, err
 	}
-	vol := volCodesReverse[resp[7]] + volCodesReverse[resp[8]] + volCodesReverse[resp[9]]
+	vol := volCodesReverse[resp[5]] + volCodesReverse[resp[6]] + volCodesReverse[resp[7]]
 	output.Volume, _ = strconv.Atoi(vol)
 
 	return output, nil

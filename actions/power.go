@@ -33,6 +33,10 @@ type Power struct {
 	Power string `json:"power"`
 }
 
+type Booted struct {
+	Booted string `json:"booted"`
+}
+
 func SetPower(ctx context.Context, address string, status bool) error {
 	if status {
 		log.Println("Turning on TV")
@@ -80,4 +84,30 @@ func GetPower(ctx context.Context, address string) (Power, error) {
 	}
 
 	return output, nil
+}
+
+func GetBooted(ctx context.Context, address string) (Booted, error) {
+	var boot Booted
+	boot.Booted = "System Booted"
+	payload := []byte{0x3A, 0x30, 0x31, 0x47, 0x30, 0x30, 0x30, 0x30, 0x0D}
+	log.Println("getting boot power status")
+	response, err := sendCommand(address, payload)
+	if err != nil {
+		return Booted{}, err
+	}
+	log.Println("power booted status: ", response)
+
+	if bytes.Contains(response, []byte{0x3A, 0x30, 0x31, 0x72, 0x30, 0x30, 0x30, 0x32, 0x0D}) {
+		log.Println("Booting TV")
+		//Power ON = 30 3A 30 31 53 30 30 30 33 0d
+		payload := []byte{0x3A, 0x30, 0x31, 0x53, 0x30, 0x30, 0x30, 0x33, 0x0d}
+		_, err2 := sendCommand(address, payload)
+		if err != nil {
+			return Booted{}, err2
+		}
+		log.Println("boot power was off, turning display on")
+		boot.Booted = "Powering On"
+	}
+
+	return boot, nil
 }

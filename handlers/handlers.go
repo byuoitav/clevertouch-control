@@ -30,6 +30,15 @@ func GetPower(context *gin.Context) {
 	context.JSON(http.StatusOK, power)
 }
 
+func GetBooted(context *gin.Context) {
+
+	power, err := actions.GetBooted(context, context.Param("address"))
+	if err != nil {
+		context.JSON(http.StatusInternalServerError, err.Error())
+	}
+	context.JSON(http.StatusOK, power)
+}
+
 func SetMute(context *gin.Context) {
 
 	mute, err := strconv.ParseBool(context.Param("mute"))
