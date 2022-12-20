@@ -19,19 +19,18 @@ func main() {
 	})
 
 	// action endpoints
-	write := router.Group("/write")
-	write.POST("/:address/power/:power", handlers.SetPower)
-	write.POST("/:address/volume/:volume", handlers.SetVolume)
-	write.POST("/:address/volume/mute/:mute", handlers.SetMute)
-	write.POST("/:address/display/:blank", handlers.SetBlank)
-	write.POST("/:address/input/:port", handlers.SetInput)
+	route := router.Group("/api/v1")
+	route.POST("/:address/power/:power", handlers.SetPower)
+	route.POST("/:address/volume/:volume", handlers.SetVolume)
+	route.POST("/:address/volume/mute/:mute", handlers.SetMute)
+	route.POST("/:address/display/:blank", handlers.SetBlank)
+	route.POST("/:address/input/:port", handlers.SetInput)
 
 	// status endpoints
-	read := router.Group("/read")
-	read.GET("/:address/power", handlers.GetPower)
-	read.GET("/:address/volume", handlers.GetVolume)
-	read.GET("/:address/volume/mute", handlers.GetMute)
-	read.GET("/:address/input", handlers.GetInput)
+	route.GET("/:address/power", handlers.GetPower)
+	route.GET("/:address/volume", handlers.GetVolume)
+	route.GET("/:address/volume/mute", handlers.GetMute)
+	route.GET("/:address/input", handlers.GetInput)
 
 	server := &http.Server{
 		Addr:           port,
