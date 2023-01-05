@@ -46,7 +46,7 @@ build: deps
 
 	@echo
 	@echo Building for linux-arm...
-	@cd cmd/ && env CGO_ENABLED=0 GOOS=linux GOARCH=arm go build -o ../dist/$(NAME)-linux-arm $(PKG)
+	@cd cmd/ && env CGO_ENABLED=0 GOOS=linux GOARCH=arm go build -o ../dist/$(NAME)-linux-arm
 
 	@echo
 	@echo Build output is located in ./dist/.
