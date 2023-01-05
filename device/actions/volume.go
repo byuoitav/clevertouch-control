@@ -3,7 +3,6 @@ package actions
 import (
 	"bytes"
 	"context"
-	"log"
 	"strconv"
 )
 
@@ -73,7 +72,6 @@ var volCodesReverse = map[byte]string{
 }
 
 func SetMute(ctx context.Context, address string, status bool) error {
-	log.Printf("Setting mute to %v", status)
 	//Mute ON = 39 3A 30 31 53 39 30 30 31 0d
 	//Mute OFF = 39 3A 30 31 53 39 30 30 30 0d
 	if status {
@@ -104,7 +102,6 @@ func GetMute(address string) (Mute, error) {
 
 	//39 3A 30 31 47 39 30 30 30 0D = Get Mute
 	payload := []byte{0x3A, 0x30, 0x31, 0x47, 0x39, 0x30, 0x30, 0x30, 0x0D}
-	log.Println("getting mute status")
 	resp, err := sendCommand(address, payload)
 	if err != nil {
 		return Mute{}, err
@@ -120,7 +117,6 @@ func GetMute(address string) (Mute, error) {
 }
 
 func SetVolume(ctx context.Context, address string, volume int) error {
-	log.Printf("Setting volume to %v", volume)
 	//38 3A 30 31 53 38 30 30 30 0d = 000%
 	vol := strconv.Itoa(volume)
 	if len(vol) == 1 {
@@ -143,12 +139,10 @@ func SetVolume(ctx context.Context, address string, volume int) error {
 }
 
 func GetVolume(address string) (Volume, error) {
-	log.Printf("Getting volume for %v", address)
 	var output Volume
 
 	//38 3A 30 31 47 38 30 30 30 0D = Get Volume
 	payload := []byte{0x3A, 0x30, 0x31, 0x47, 0x38, 0x30, 0x30, 0x30, 0x0D}
-	log.Println("getting volume status")
 	resp, err := sendCommand(address, payload)
 	if err != nil {
 		return Volume{}, err

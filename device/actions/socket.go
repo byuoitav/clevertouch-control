@@ -2,14 +2,9 @@ package actions
 
 import (
 	"bufio"
-	//"context"
-	//"encoding/xml"
-	//"errors"
 	"fmt"
 	"net"
 
-	//"regexp"
-	//"strconv"
 	"time"
 )
 

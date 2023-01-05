@@ -3,7 +3,6 @@ package actions
 import (
 	"bytes"
 	"errors"
-	"log"
 
 	"context"
 )
@@ -50,12 +49,10 @@ func GetInput(address string) (Input, error) {
 
 	// 3A 3A 30 31 47 3A 30 30 30 0D = Get Input
 	payload := []byte{0x3A, 0x30, 0x31, 0x47, 0x3A, 0x30, 0x30, 0x30, 0x0D}
-	log.Println("getting input")
 	resp, err := sendCommand(address, payload)
 	if err != nil {
 		return output, err
 	}
-	log.Printf("got input. hex string: %x\n", payload)
 	switch {
 	case bytes.Contains(resp, []byte{0x3A, 0x30, 0x31, 0x72, 0x3A, 0x30, 0x30, 0x31, 0x0D}):
 		output.Input = "hdmi1"
@@ -94,7 +91,6 @@ func GetInput(address string) (Input, error) {
 func SetInput(ctx context.Context, address string, input string) error {
 	var payload []byte
 
-	log.Printf("input: %s", input)
 	CurrentInput = input
 	switch input {
 	case "tv":
