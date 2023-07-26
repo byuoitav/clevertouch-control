@@ -5,29 +5,6 @@ import (
 	"context"
 )
 
-/*
-We are setting the Backlight to 100% (0x64) to turn the TV on
-and 0% (0x00) to turn the TV off. This is a workaround because the on/off command
-takes a long time to respond and the NIC loses power when powered off.
-*/
-
-// CleverTouch Command Codes
-/*
-
-SET:
-
-Backlight:
-30 3A 30 31 53 30 30 30 30 0d = (OFF) Backlight 0%
-30 3A 30 31 53 30 30 30 31 0d = (ON) Backlight 100%
-
-
-GET:
-30 3A 30 31 47 30 30 30 30 0D = Get Backlight (OFF/ON)
-30 3A 30 31 72 30 30 30 30 0D = (OFF) Backlight 0%
-30 3A 30 31 72 30 30 30 31 0D = (ON) Backlight 100%
-
-*/
-
 type Power struct {
 	Power string `json:"power"`
 }
