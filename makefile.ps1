@@ -74,7 +74,7 @@ function Build {
         Set-Item -Path env:CGO_ENABLED -Value 0
         Set-Item -Path env:GOOS -Value "linux"
         Set-Item -Path env:GOARCH -Value "amd64"
-        Invoke-Expression "go build -v -o ../dist/${NAME}-bin"
+        Invoke-Expression "go build -v -o ../dist/${NAME}-amd64"
 
 
         Write-Output "*****************************************"
@@ -189,6 +189,7 @@ elseif ($COMMAND -eq "Deps") {
     Deps
 }
 elseif ($COMMAND -eq "Build") {
+    Cleanup
     Deps
     Build
 }
@@ -200,6 +201,7 @@ elseif ($COMMAND -eq "Docker" ) {
     Deps
     Build
     DockerFunc
+    Cleanup
 }
 elseif ($COMMAND -eq "Deploy" ) {
     Cleanup
@@ -207,6 +209,7 @@ elseif ($COMMAND -eq "Deploy" ) {
     Build
     DockerFunc
     Deploy
+    Cleanup
 }
 else {
     Write-Output "Please include a valid command parameter"

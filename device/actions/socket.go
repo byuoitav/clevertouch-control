@@ -69,31 +69,31 @@ func sendCommand(address string, cmd []byte) ([]byte, error) {
 }
 
 // SendCommand opens a connection with <addr> and sends the <command> to the via, returning the response from the via, or an error if one occured.
-func sendOneWayCommand(address string, cmd []byte) ([]byte, error) {
-	port := "4999"
+// func sendOneWayCommand(address string, cmd []byte) ([]byte, error) {
+// 	port := "4999"
 
-	// get the connection
-	fmt.Printf("Opening telnet connection with %s\n", address)
-	conn, err := createConnection(address, port)
-	if err != nil {
-		return nil, err
-	}
-	defer conn.Close()
+// 	// get the connection
+// 	fmt.Printf("Opening telnet connection with %s\n", address)
+// 	conn, err := createConnection(address, port)
+// 	if err != nil {
+// 		return nil, err
+// 	}
+// 	defer conn.Close()
 
-	timeoutDuration := 3 * time.Second
+// 	timeoutDuration := 3 * time.Second
 
-	// Set Read Connection Duration
-	conn.SetReadDeadline(time.Now().Add(timeoutDuration))
+// 	// Set Read Connection Duration
+// 	conn.SetReadDeadline(time.Now().Add(timeoutDuration))
 
-	// write command
-	if len(cmd) > 0 {
-		_, err = conn.Write(cmd)
-		if err != nil {
-			return nil, err
-		}
-	}
+// 	// write command
+// 	if len(cmd) > 0 {
+// 		_, err = conn.Write(cmd)
+// 		if err != nil {
+// 			return nil, err
+// 		}
+// 	}
 
-	fmt.Printf("One way command sent: %s\n", cmd)
+// 	fmt.Printf("One way command sent: %s\n", cmd)
 
-	return nil, nil
-}
+// 	return nil, nil
+// }
