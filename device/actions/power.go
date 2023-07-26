@@ -39,14 +39,14 @@ type Booted struct {
 func SetPower(ctx context.Context, address string, status bool) error {
 	if status {
 		//Power ON = 30 3A 30 31 53 30 30 30 31 0d
-		payload := []byte{0x3A, 0x30, 0x31, 0x53, 0x30, 0x30, 0x30, 0x31, 0x0d}
+		payload := []byte{0x3A, 0x30, 0x31, 0x53, 0x30, 0x30, 0x30, 0x33, 0x0d}
 		_, err := sendCommand(address, payload)
 		if err != nil {
 			return err
 		}
 	} else {
 		//Power OFF = 30 3A 30 31 53 30 30 30 30 0d
-		payload := []byte{0x3A, 0x30, 0x31, 0x53, 0x30, 0x30, 0x30, 0x30, 0x0d}
+		payload := []byte{0x3A, 0x30, 0x31, 0x53, 0x30, 0x30, 0x30, 0x32, 0x0d}
 		_, err := sendCommand(address, payload)
 		if err != nil {
 			return err
@@ -60,7 +60,7 @@ func GetPower(ctx context.Context, address string) (Power, error) {
 	//30 3A 30 31 72 30 30 30 31 0D (ON)
 	on := []byte{0x3A, 0x30, 0x31, 0x72, 0x30, 0x30, 0x30, 0x31, 0x0D}
 	//30 3A 30 31 72 30 30 30 30 0D (OFF)
-	off := []byte{0x3A, 0x30, 0x31, 0x72, 0x30, 0x30, 0x30, 0x30, 0x0D}
+	off := []byte{0x3A, 0x30, 0x31, 0x72, 0x30, 0x30, 0x30, 0x32, 0x0D}
 
 	var output Power
 	//GetPower = 30 3A 30 31 47 30 30 30 30 0D
@@ -83,7 +83,7 @@ func GetPower(ctx context.Context, address string) (Power, error) {
 
 func GetBooted(ctx context.Context, address string) (Booted, error) {
 	var boot Booted
-	boot.Booted = "System Booted"
+	boot.Booted = "System On"
 	payload := []byte{0x3A, 0x30, 0x31, 0x47, 0x30, 0x30, 0x30, 0x30, 0x0D}
 	response, err := sendCommand(address, payload)
 	if err != nil {
@@ -92,12 +92,12 @@ func GetBooted(ctx context.Context, address string) (Booted, error) {
 
 	if bytes.Contains(response, []byte{0x3A, 0x30, 0x31, 0x72, 0x30, 0x30, 0x30, 0x32, 0x0D}) {
 		//Power ON = 30 3A 30 31 53 30 30 30 33 0d
-		payload := []byte{0x3A, 0x30, 0x31, 0x53, 0x30, 0x30, 0x30, 0x33, 0x0d}
-		_, err2 := sendCommand(address, payload)
-		if err != nil {
-			return Booted{}, err2
-		}
-		boot.Booted = "Powering On"
+		// payload := []byte{0x3A, 0x30, 0x31, 0x53, 0x30, 0x30, 0x30, 0x33, 0x0d}
+		// _, err2 := sendCommand(address, payload)
+		// if err != nil {
+		// 	return Booted{}, err2
+		// }
+		boot.Booted = "System Off"
 	}
 
 	return boot, nil
