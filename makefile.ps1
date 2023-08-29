@@ -125,7 +125,7 @@ function DockerFunc {   #can not just be docker because it creates an infinite l
     } elseif ($TAG -match $PRD_TAG_REGEX) {
         Write-Output "Building prd containers with tag $TAG"
 
-        Write-Output "Building container $DOCKER_PKG/$NAME-amd64-dev:$COMMIT_HASH"
+        Write-Output "Building container $DOCKER_PKG/$NAME-amd64-dev:$TAG"
         Invoke-Expression "docker build -f dockerfile --build-arg NAME=$NAME-amd64 -t $DOCKER_PKG/${NAME}:$TAG dist"
 
     	Write-Output "Building container $DOCKER_PKG/${NAME}:$TAG"
@@ -160,8 +160,11 @@ function Deploy {
     } elseif ($TAG -match $PRD_TAG_REGEX) {
             Write-Output "Pushing prd containers with tag $TAG"
     
-            Write-Output "Pushing container $DOCKER_PKG/${NAME}:$TAG"
-            Invoke-Expression "docker push $DOCKER_PKG/${NAME}:$TAG"
+            Write-Output "Pushing container $DOCKER_PKG/$NAME-amd64:$TAG"
+            Invoke-Expression "docker push $DOCKER_PKG/$NAME-amd64:$TAG"
+    
+            Write-Output "Pushing container $DOCKER_PKG/$NAME-arm:$TAG"
+            Invoke-Expression "docker push $DOCKER_PKG/$NAME-arm:$TAG"
     } else {
             Write-Output "Deploy function quit unexpectedly. Commit Hash: $COMMIT_HASH     Tag: $TAG"
     }
